@@ -1,0 +1,12 @@
+# air.toml
+
+root = "."  # Project root directory
+
+[build]
+  # Watch all .go files in the project directory
+  include = ["*.go"]
+
+[run]
+  # Command to run your Go application
+  command = "go"
+  args = ["run", "*.go"]
