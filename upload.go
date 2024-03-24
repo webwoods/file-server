@@ -15,7 +15,7 @@ import (
 const (
 	staticDir        = "./static"
 	maxImageFileSize = 20 << 20  // 20 MB maximum file size for images
-	maxVideoFileSize = 200 << 20 // 100 MB maximum file size for videos
+	maxVideoFileSize = 100 << 20 // 100 MB maximum file size for videos
 )
 
 func uploadFile(w http.ResponseWriter, r *http.Request, fileType string) {
@@ -31,10 +31,9 @@ func uploadFile(w http.ResponseWriter, r *http.Request, fileType string) {
 		return
 	}
 
-	// Parse the multipart form data with the updated maximum file size
-	err := r.ParseMultipartForm(maxFileSize)
-	if err != nil {
-		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+	// Check the content length of the request
+	if r.ContentLength > maxFileSize {
+		http.Error(w, "File size exceeds the maximum allowed size", http.StatusBadRequest)
 		return
 	}
 

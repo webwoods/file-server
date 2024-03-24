@@ -22,18 +22,18 @@ func main() {
 	http.Handle("/", fs)
 
 	// images
-	http.HandleFunc("/api/upload/image", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/api/upload/image", func(w http.ResponseWriter, r *http.Request) {
 		uploadFile(w, r, "images")
 	})
-	http.HandleFunc("/api/get/image", getImage)
-	http.HandleFunc("/api/get/images", getImages)
+	http.HandleFunc("/v1/api/get/image", getImage)
+	http.HandleFunc("/v1/api/get/images", getImages)
 
 	// videos
-	http.HandleFunc("/api/upload/video", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/api/upload/video", func(w http.ResponseWriter, r *http.Request) {
 		uploadFile(w, r, "videos")
 	})
-	http.HandleFunc("/api/get/video", getVideo)
-	http.HandleFunc("/api/get/videos", getVideos)
+	http.HandleFunc("/v1/api/get/video", getVideo)
+	http.HandleFunc("/v1/api/get/videos", getVideos)
 
 	// Start the server
 	addr := ":8080"
