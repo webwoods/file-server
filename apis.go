@@ -11,17 +11,9 @@ func setupHandlers() {
 	// Register the file server handler to serve static files
 	http.Handle("/", fs)
 
-	// images
-	http.HandleFunc("/v1/api/upload/image", func(w http.ResponseWriter, r *http.Request) {
-		uploadFile(w, r, "images")
-	})
-	http.HandleFunc("/v1/api/get/image", getImage)
-	http.HandleFunc("/v1/api/get/images", getImages)
+	// presigned upload url
+	http.HandleFunc("/v1/api/presigned/upload", generatePresignedUploadURL)
 
-	// videos
-	http.HandleFunc("/v1/api/upload/video", func(w http.ResponseWriter, r *http.Request) {
-		uploadFile(w, r, "videos")
-	})
-	http.HandleFunc("/v1/api/get/video", getVideo)
-	http.HandleFunc("/v1/api/get/videos", getVideos)
+	// file upload
+	http.HandleFunc("/static/", handleFileUpload)
 }

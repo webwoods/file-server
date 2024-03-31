@@ -44,3 +44,5 @@ tmp/
 
 # Static content folder
 static/
+
+*.env
