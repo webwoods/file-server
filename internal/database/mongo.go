@@ -1,6 +1,6 @@
 // mongo_singleton.go
 
-package main
+package database
 
 import (
 	"context"

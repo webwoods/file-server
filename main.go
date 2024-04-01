@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"webwoods.org/fileserver/internal/api"
 )
 
 func main() {
@@ -16,7 +18,7 @@ func main() {
 	}
 
 	// Set up HTTP handlers
-	setupHandlers()
+	api.SetupHandlers()
 
 	// Start the server
 	addr := ":8080"

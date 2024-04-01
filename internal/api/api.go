@@ -1,10 +1,12 @@
-package main
+package api
 
 import (
 	"net/http"
+
+	"webwoods.org/fileserver/internal/content"
 )
 
-func setupHandlers() {
+func SetupHandlers() {
 	// Define the file server handler
 	fs := http.FileServer(http.Dir("./static"))
 
@@ -12,8 +14,8 @@ func setupHandlers() {
 	http.Handle("/", fs)
 
 	// presigned upload url
-	http.HandleFunc("/v1/api/presigned/upload", generatePresignedUploadURL)
+	http.HandleFunc("/v1/api/presigned/upload", content.GeneratePresignedUploadURL)
 
 	// file upload
-	http.HandleFunc("/static/", handleFileUpload)
+	http.HandleFunc("/static/", content.HandleFileUpload)
 }
