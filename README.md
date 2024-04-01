@@ -1,12 +1,21 @@
-# File Server with APIs README
+# OSU
 
-This is a simple file server with APIs built in Go, allowing you to upload and retrieve images and videos.
+**OpenSignedURL** is a simple file server with APIs built in Go, allowing you to upload files and get the experience of working with a CDN for free. 
+
+*This is only suitable for development. (not suitable for production)*
 
 ## Getting Started
 
 ### Prerequisites
 
-Make sure you have Go installed on your system. If not, you can download and install it from [the official Go website](https://golang.org/).
+Make sure you have Go installed on your system. If not, you can download and install it from [the official Go website](https://golang.org/).  
+
+Currently, OSU only supports MongoDB databases. Create a `.env` file in the root of the project folder and add your connection URI to connect to your database.
+
+```
+# .env
+ds="mongodb://username:password@cluster/options"
+```
 
 ### Installation
 
@@ -38,22 +47,34 @@ Make sure you have Go installed on your system. If not, you can download and ins
 
    The server will start running on `http://localhost:8080`.
 
-2. You can access the server's APIs to upload and retrieve images and videos:
+2. To upload a file to the server, you must first request a pre-signed upload URL which will be the temporary file upload path.
 
-   - **Upload Image**: `POST /v1/api/upload/image`
-   - **Get Image**: `GET /v1/api/get/image?filename=image.jpg`
-   - **Get Images**: `GET /v1/api/get/images`
-   - **Upload Video**: `POST /v1/api/upload/video`
-   - **Get Video**: `GET /v1/api/get/video?filename=video.mp4`
-   - **Get Videos**: `GET /v1/api/get/videos`
+   ```
+   curl -X POST http://localhost:8080/v1/api/presigned/upload
 
-3. You can also use `curl` to check file uploads:
+   # sample response
+   {"url":"/static/1711949164033836200/images/1711949164034402900.jpg","expiration":"2024-04-01T11:56:04.0344029+05:30"}
+   ```
 
-    ```
-    curl -X POST -F "file=@/path/to/your/image.jpg" http://localhost:8080/v1/api/upload/image
+3. You can then use this URL to upload the file. Note that,
+   - if the URL is invalid
+   - if the folderId doesn't match
+   - if the URL is expired
 
-    curl -X POST -F "file=@/path/to/your/video.mp4" http://localhost:8080/v1/api/upload/video
-    ```
+   then the file will not be uploaded.
+
+   ```
+   $ curl -X PUT -T img6.jpg http://localhost:8080/static/1711949164033836200/images/1711949164034402900.jpg
+
+   # invalid URL response
+   Failed to create file
+   
+   # expired URL response
+   Presigned URL is expired
+
+   # succesful upload response
+   File 1711949164034402900.jpg uploaded successfully
+   ```
    
 <!-- ## Security
 
@@ -61,8 +82,12 @@ To ensure that only authorized users have access to the server and its APIs, con
 
 ## Limitations
 
-- The maximum file size for images is 20 MB, and for videos, it's 100 MB.
-- Larger files exceeding the maximum size will not be uploaded.
+   - Authentication features are still under development.
+   - Maximum file size threshold not implemented.
+   - Issuing API key is still under development
+ 
+<!-- - The maximum file size for images is 20 MB, and for videos, it's 100 MB.
+- Larger files exceeding the maximum size will not be uploaded. -->
 
 <!-- ## Contributing
 
