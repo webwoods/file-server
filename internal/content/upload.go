@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 func HandleFileUpload(w http.ResponseWriter, r *http.Request) {
@@ -28,12 +27,19 @@ func HandleFileUpload(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to create upload directory", http.StatusInternalServerError)
 		return
 	}
+	fmt.Println("Upload directory exists")
+
+	// Construct the file path
+	relativePath := r.URL.Path[len("/static/"):] // Remove the "/static/" prefix
+	filePath := filepath.Join(uploadDir, relativePath)
+
+	fmt.Println("r.URL.Path: ", r.URL.Path)
+	fmt.Println("Upload file path: ", filePath)
 
 	// Create the file inside the upload directory
-	filePath := filepath.Join(uploadDir, strings.Split(filename, ".")[0], "images", filename)
-	fmt.Println("Upload file path: ", filePath)
 	file, err := os.Create(filePath)
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "Failed to create file", http.StatusInternalServerError)
 		return
 	}
